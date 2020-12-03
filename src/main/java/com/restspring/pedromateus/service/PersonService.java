@@ -4,12 +4,14 @@ package com.restspring.pedromateus.service;
 import com.restspring.pedromateus.dto.MessageResponseDTO;
 import com.restspring.pedromateus.dto.request.PersonDTO;
 import com.restspring.pedromateus.entity.Person;
+import com.restspring.pedromateus.exceptions.PersonNotFoundException;
 import com.restspring.pedromateus.mapper.PersonMapper;
 import com.restspring.pedromateus.repository.PersonRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,5 +34,10 @@ public class PersonService {
     public List<PersonDTO> listAll() {
         List<Person> list=personRespository.findAll();
         return list.stream().map(personMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public PersonDTO findById(Long id) throws PersonNotFoundException {
+        Person person = personRespository.findById(id).orElseThrow(()->new PersonNotFoundException(id));
+        return personMapper.toDTO(person);
     }
 }
