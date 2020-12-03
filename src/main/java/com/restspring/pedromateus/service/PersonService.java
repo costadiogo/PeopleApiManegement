@@ -7,6 +7,7 @@ import com.restspring.pedromateus.entity.Person;
 import com.restspring.pedromateus.exceptions.PersonNotFoundException;
 import com.restspring.pedromateus.mapper.PersonMapper;
 import com.restspring.pedromateus.repository.PersonRespository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +16,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
     private PersonRespository personRespository;
 
-    private PersonMapper personMapper=PersonMapper.INSTANCE;
-
-    @Autowired
-    public PersonService(PersonRespository personRespository) {
-        this.personRespository = personRespository;
-    }
+    private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
     public MessageResponseDTO createPerson(PersonDTO personDTO) {
         Person personToSave = personMapper.toModel(personDTO);
